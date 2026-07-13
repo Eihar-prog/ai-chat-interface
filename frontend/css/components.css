@@ -1,0 +1,1233 @@
+/* =============================================
+   КОМПОНЕНТЫ ИНТЕРФЕЙСА (UI Components)
+   =============================================
+   Содержит стили для всех переиспользуемых
+   компонентов интерфейса: сайдбар, настройки,
+   чат, сообщения, ввод, модальные окна и т.д.
+   ============================================= */
+
+/* =============================================
+   1. ЭЛЕМЕНТЫ САЙДБАРА (Sidebar)
+   ============================================= */
+
+/* Шапка сайдбара */
+.sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Заголовок приложения */
+.app-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Логотип (иконка) */
+.app-logo {
+    width: 24px;
+    height: 24px;
+    fill: var(--accent-color);
+}
+
+/* Ряд кнопок под шапкой */
+.sidebar-buttons-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 16px 8px 16px;
+}
+
+/* Кнопка "Новый чат" */
+.new-chat-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-grow: 1;
+    padding: 10px;
+    background-color: var(--accent-color);
+    color: white;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: background var(--transition-speed);
+}
+
+.new-chat-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Кнопка "Временный чат" */
+.temp-chat-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed);
+    flex-shrink: 0;
+}
+
+.temp-chat-btn:hover {
+    color: var(--accent-warning);
+    border-color: var(--accent-warning);
+    background-color: rgba(245, 158, 11, 0.05);
+}
+
+/* Список чатов */
+.chat-list-container {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: auto;
+    padding: 8px;
+    min-height: 120px;
+}
+
+/* Отдельный элемент чата в списке */
+.chat-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    margin-bottom: 4px;
+    border-radius: var(--border-radius);
+    transition: background var(--transition-speed);
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.chat-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.chat-item.active {
+    background-color: var(--bg-active);
+    color: var(--text-primary);
+}
+
+/* Временный чат (с пунктирной рамкой) */
+.chat-item.temporary {
+    border: 1px dashed rgba(245, 158, 11, 0.4);
+    background-color: rgba(245, 158, 11, 0.02);
+}
+
+.chat-item.temporary:hover {
+    background-color: rgba(245, 158, 11, 0.05);
+    border-color: var(--accent-warning);
+}
+
+.chat-item.temporary.active {
+    background-color: rgba(245, 158, 11, 0.12);
+    border-color: var(--accent-warning);
+}
+
+/* Бейдж "Врем." для временных чатов */
+.temp-badge {
+    font-size: 0.65rem;
+    background-color: var(--accent-warning);
+    color: white;
+    padding: 1px 4px;
+    border-radius: 4px;
+    margin-left: auto;
+    margin-right: 18px;
+    font-weight: 600;
+}
+
+/* Иконка чата */
+.chat-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.chat-item.temporary .chat-icon {
+    color: var(--accent-warning);
+}
+
+/* Имя чата */
+.chat-name {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 8px;
+    flex-grow: 1;
+}
+
+/* Поле ввода имени (при переименовании) */
+.chat-name-input {
+    width: 80%;
+    font-size: 0.9rem;
+    background: var(--bg-input);
+    border: 1px solid var(--accent-color);
+    color: var(--text-primary);
+    padding: 2px 4px;
+    border-radius: 4px;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+/* Кнопка действий над чатом (три точки) */
+.chat-actions-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+    color: var(--text-secondary);
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.chat-item:hover .chat-actions-btn,
+.chat-item.active .chat-actions-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-actions-btn:hover {
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ----- Контекстное меню (для управления чатами) ----- */
+.context-menu {
+    position: absolute;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    padding: 4px 0;
+    min-width: 130px;
+}
+
+.context-menu-item {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    transition: all var(--transition-speed);
+}
+
+.context-menu-item:hover {
+    background-color: var(--bg-active);
+    color: var(--text-primary);
+}
+
+.context-menu-item.delete {
+    color: var(--accent-danger);
+}
+
+.context-menu-item.delete:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* =============================================
+   2. СПЛИТТЕР (Resize Handle)
+   ============================================= */
+
+.sidebar-splitter {
+    height: 5px;
+    background-color: var(--border-color);
+    cursor: ns-resize;
+    transition: background-color 0.2s ease;
+    position: relative;
+    flex-shrink: 0;
+    z-index: 20;
+}
+
+.sidebar-splitter:hover,
+.sidebar-splitter.dragging {
+    background-color: var(--accent-color);
+    box-shadow: 0 0 8px var(--accent-color);
+}
+
+.sidebar-splitter::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 1px;
+    background-color: var(--text-muted);
+    opacity: 0.5;
+}
+
+
+/* =============================================
+   3. ПАНЕЛЬ НАСТРОЕК (Settings)
+   ============================================= */
+
+.settings-panel {
+    border-top: 1px solid var(--border-color);
+    padding: 16px;
+    background-color: var(--bg-sidebar);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    flex-shrink: 0;
+    height: 380px;
+    min-height: 150px;
+}
+
+.settings-header {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.settings-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.settings-label .value-indicator {
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.settings-select,
+.settings-input {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 0.85rem;
+    transition: border-color var(--transition-speed);
+}
+
+.settings-select:focus,
+.settings-input:focus {
+    border-color: var(--accent-color);
+}
+
+.settings-select option {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+}
+
+/* Range-слайдер */
+.settings-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border-color);
+    outline: none;
+}
+
+.settings-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.settings-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Строка с загрузкой системной инструкции */
+.sys-instruction-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* Текстовое поле системной инструкции */
+.settings-textarea {
+    width: 100%;
+    height: 60px;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 0.8rem;
+    resize: none;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+.settings-textarea:focus {
+    border-color: var(--accent-color);
+}
+
+/* Кнопка загрузки файла инструкции */
+.sys-file-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    transition: all var(--transition-speed);
+    flex-shrink: 0;
+}
+
+.sys-file-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+    background-color: var(--bg-active);
+}
+
+/* Ряд с переключателем темы */
+.flex-row-settings {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6px;
+}
+
+/* Переключатель (toggle) */
+.switch-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 18px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border-color);
+    transition: .3s;
+    border-radius: 18px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: var(--accent-color);
+}
+
+input:checked+.slider:before {
+    transform: translateX(16px);
+}
+
+
+/* =============================================
+   4. ОБЛАСТЬ ЧАТА (Chat Area)
+   ============================================= */
+
+/* Верхняя панель чата */
+.chat-header-bar {
+    height: 65px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    padding: 0 20px 0 60px;
+    background-color: var(--bg-sidebar);
+}
+
+.chat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.active-chat-title {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.active-chat-status {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Контейнер сообщений (лента) */
+.chat-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Приветственный экран при пустом чате */
+.empty-chat-welcome {
+    margin: auto;
+    max-width: 500px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.welcome-logo {
+    font-size: 3rem;
+    color: var(--accent-color);
+}
+
+.welcome-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.welcome-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+
+/* ----- Сообщения (Bubbles) ----- */
+
+/* Анимация появления сообщения */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Сообщение пользователя (справа) */
+.message.user {
+    align-self: flex-end;
+}
+
+.message.user .message-bubble {
+    background-color: var(--user-msg-bg);
+    border-bottom-right-radius: 2px;
+    color: var(--text-primary);
+}
+
+/* Сообщение ИИ (слева) */
+.message.ai {
+    align-self: flex-start;
+}
+
+.message.ai .message-bubble {
+    background-color: var(--ai-msg-bg);
+    border-bottom-left-radius: 2px;
+    border: 1px solid var(--border-color);
+}
+
+/* Пузырёк сообщения */
+.message-bubble {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+/* Блок отладки скомпилированного XML */
+.xml-debug-container {
+    margin-top: 8px;
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    color: #8be9fd;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    display: none;
+}
+
+/* Кнопка переключения XML-отладки */
+.xml-toggle-btn {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-decoration: underline;
+    margin-top: 6px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.xml-toggle-btn:hover {
+    color: var(--text-primary);
+}
+
+/* Inline code в сообщениях */
+.message-bubble code {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: #ff79c6;
+}
+
+/* Блок pre/code */
+.message-bubble pre {
+    background-color: var(--code-bg);
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 10px 0;
+    border: 1px solid var(--border-color);
+}
+
+.message-bubble pre code {
+    background: none;
+    padding: 0;
+    color: #f8f8f2;
+}
+
+/* Подвал сообщения */
+.message-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 0 4px;
+}
+
+.message.user .message-footer {
+    justify-content: flex-end;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Кнопки действий над сообщением */
+.msg-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    transition: all var(--transition-speed);
+}
+
+.msg-action-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+    background-color: var(--bg-active);
+}
+
+.msg-action-btn svg {
+    width: 13px;
+    height: 13px;
+}
+
+
+/* =============================================
+   5. НИЖНЯЯ ОБЛАСТЬ ВВОДА (Bottom Input)
+   ============================================= */
+
+.bottom-container {
+    border-top: 1px solid var(--border-color);
+    padding: 16px;
+    background-color: var(--bg-sidebar);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Ряд ввода */
+.input-bar-layout {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+}
+
+/* Столбец прикреплённых файлов */
+.files-attachment-column {
+    width: 220px;
+    min-width: 220px;
+    max-height: 140px;
+    overflow-y: auto;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: all var(--transition-speed) ease;
+}
+
+/* Скрытое состояние панели файлов */
+.files-attachment-column.collapsed {
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Заголовок панели файлов */
+.files-column-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.files-header-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Кнопка сворачивания панели файлов */
+.collapse-files-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-speed);
+}
+
+.collapse-files-btn:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-active);
+}
+
+/* Кнопка "Добавить" в заголовке */
+.files-add-inline-btn {
+    color: var(--accent-color);
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-weight: 600;
+}
+
+.files-add-inline-btn:hover {
+    color: var(--accent-hover);
+}
+
+/* Пустое состояние файлов */
+.file-empty-state {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 16px 0;
+    border: 1px dashed var(--border-color);
+    border-radius: 6px;
+}
+
+/* Строка с файлом (бейдж) */
+.file-badge-row {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 6px 8px;
+    border-radius: 6px;
+    justify-content: space-between;
+    animation: fadeIn 0.2s ease;
+}
+
+.file-badge-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.file-checkbox {
+    cursor: pointer;
+    width: 14px;
+    height: 14px;
+    accent-color: var(--accent-color);
+}
+
+.file-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.file-badge-name {
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-primary);
+}
+
+.file-badge-size {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.file-badge-delete {
+    color: var(--text-muted);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-speed);
+}
+
+.file-badge-delete:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: var(--accent-danger);
+}
+
+/* Контейнер списка файлов */
+.attached-files-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+
+/* ----- Поле ввода промта ----- */
+.prompt-box-container {
+    flex-grow: 1;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    transition: border-color var(--transition-speed);
+    min-height: 56px;
+}
+
+.prompt-box-container:focus-within {
+    border-color: var(--accent-color);
+}
+
+/* Индикатор активного шаблона над полем ввода */
+.prompt-template-status {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba(168, 85, 247, 0.1);
+    border: 1px dashed var(--accent-purple);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: var(--accent-purple);
+    animation: fadeIn 0.20s ease;
+}
+
+.prompt-template-status.active {
+    display: flex;
+}
+
+/* Кнопка отключения шаблона */
+.remove-template-badge {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+.remove-template-badge:hover {
+    color: var(--accent-danger);
+}
+
+/* Текстовая область ввода промта */
+.prompt-textarea {
+    width: 100%;
+    height: 100%;
+    min-height: 36px;
+    max-height: 140px;
+    resize: none;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: var(--text-primary);
+    overflow-y: auto;
+    transition: height 0.1s ease;
+    -webkit-user-select: text;
+    user-select: text;
+    flex-grow: 1;
+}
+
+/* Панель инструментов под полем ввода */
+.prompt-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toolbar-tip {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Кнопка разворачивания файлов (скрепка) */
+.expand-files-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    position: relative;
+    transition: all var(--transition-speed);
+}
+
+.expand-files-btn.active {
+    display: flex;
+}
+
+.expand-files-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+    background-color: var(--bg-active);
+}
+
+/* Счётчик файлов на скрепке */
+.files-badge-counter {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: bold;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: none; /* Скрыт по умолчанию, показывается через JS */
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-sidebar);
+    animation: fadeIn 0.15s ease;
+}
+
+/* Кнопка конструктора шаблонов */
+.template-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    transition: all var(--transition-speed);
+}
+
+.template-btn:hover,
+.template-btn.active {
+    color: var(--accent-purple);
+    border-color: var(--accent-purple);
+    background-color: rgba(168, 85, 247, 0.05);
+}
+
+/* Кнопка отправки */
+.send-btn {
+    background-color: var(--accent-color);
+    color: white;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition-speed);
+}
+
+.send-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+.send-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: white;
+}
+
+/* Ряд кнопок в тулбаре (справа) */
+.toolbar-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+/* =============================================
+   6. МОДАЛЬНОЕ ОКНО (Modal Dialog)
+   ============================================= */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-card {
+    background-color: var(--bg-sidebar);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    width: 500px;
+    max-width: 90%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.modal-close {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.modal-buttons-row {
+    display: flex;
+    gap: 10px;
+}
+
+/* Кнопки в модальном окне */
+.btn-primary {
+    background-color: var(--accent-purple);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-secondary {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-active);
+}
+
+/* Вариант кнопки с опасным действием */
+.btn-danger {
+    color: var(--accent-danger) !important;
+}
+
+/* Inline-код в описании модального окна */
+.modal-desc code.modal-code-inline {
+    color: var(--accent-purple);
+}
+
+/* Текстовая область редактора шаблонов */
+.template-edit-area {
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    color: #f8f8f2;
+    height: 160px;
+    overflow-y: auto;
+    resize: vertical;
+    outline: none;
+    -webkit-user-select: text;
+    user-select: text;
+    width: 100%;
+}
+
+.template-edit-area:focus {
+    border-color: var(--accent-purple);
+}
+
+
+/* =============================================
+   7. TOAST-УВЕДОМЛЕНИЯ (Notifications)
+   ============================================= */
+
+.toast-notification {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background-color: var(--bg-card);
+    border-left: 4px solid var(--accent-success);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.toast-notification.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+
+/* =============================================
+   8. ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ (Utilities)
+   ============================================= */
+
+/* Скрытие элемента (display: none) */
+.hidden {
+    display: none !important;
+}
+
+/* Запрет выделения текста */
+.no-select {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Разрешение выделения текста */
+.text-selectable {
+    -webkit-user-select: text;
+    user-select: text;
+}

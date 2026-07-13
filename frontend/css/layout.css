@@ -1,0 +1,70 @@
+/* =============================================
+   СТРУКТУРА МАКЕТА (Layout)
+   =============================================
+   Определяет расположение основных блоков:
+   App Wrapper, Sidebar, Main Content.
+   ============================================= */
+
+/* ----- Контейнер приложения (flex-обёртка) ----- */
+.app-wrapper {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ----- Боковая панель (сайдбар) ----- */
+.sidebar {
+    width: 320px;
+    min-width: 320px;
+    height: 100%;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    transition: margin-left var(--transition-speed) ease, opacity var(--transition-speed) ease;
+    z-index: 10;
+}
+
+/* Скрытое состояние сайдбара */
+.sidebar.collapsed {
+    margin-left: -320px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ----- Главная область чата ----- */
+.main-content {
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-chat);
+    position: relative;
+}
+
+/* ----- Кнопка переключения сайдбара (бургер) ----- */
+.sidebar-toggle-trigger {
+    position: absolute;
+    left: 10px;
+    top: 15px;
+    z-index: 20;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--border-radius);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all var(--transition-speed);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-toggle-trigger:hover {
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+    background-color: var(--bg-active);
+}

@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Studio Desktop Interface</title>
+
+    <!-- ==========================================
+         ЕДИНАЯ ТОЧКА ПОДКЛЮЧЕНИЯ СТИЛЕЙ
+         @import в style.css импортирует:
+           - variables.css  (переменные и темы)
+           - base.css       (сброс и база)
+           - layout.css     (структура макета)
+           - components.css (все компоненты)
+         ========================================== -->
+    <link rel="stylesheet" href="frontend/css/style.css" />
+  </head>
+  <body>
+    <!-- ==========================================
+         ГЛАВНЫЙ КОНТЕЙНЕР ПРИЛОЖЕНИЯ
+         ========================================== -->
+    <div class="app-wrapper">
+      <!-- ==========================================
+             КНОПКА ПЕРЕКЛЮЧЕНИЯ САЙДБАРА (бургер)
+             ========================================== -->
+      <button
+        class="sidebar-toggle-trigger"
+        id="sidebar-toggle"
+        title="Скрыть/Показать панель"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- ==========================================
+             ЛЕВЫЙ САЙДБАР
+             ========================================== -->
+      <aside class="sidebar" id="sidebar">
+        <!-- Шапка сайдбара -->
+        <div class="sidebar-header">
+          <div class="app-title">
+            <!-- Логотип приложения -->
+            <svg class="app-logo" viewBox="0 0 24 24">
+              <path
+                d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm1 16.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5zm-3-4c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5zm-3-4c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5zM12 4c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8z"
+              />
+            </svg>
+            <span>Gemini Core Desk</span>
+          </div>
+        </div>
+
+        <!-- Ряд кнопок -->
+        <div class="sidebar-buttons-row">
+          <button
+            class="new-chat-btn"
+            id="new-chat-btn"
+            title="Создать новый чат"
+          >
+            <span>+</span> Новый чат
+          </button>
+          <button
+            class="temp-chat-btn"
+            id="temp-chat-btn"
+            title="Временный чат (не сохраняется в истории)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Список чатов (динамический) -->
+        <div class="chat-list-container" id="chat-list">
+          <!-- Рендерится динамически через JS -->
+        </div>
+
+        <!-- Сплиттер для изменения высоты панели настроек -->
+        <div
+          class="sidebar-splitter"
+          id="sidebar-splitter"
+          title="Перетащите для настройки высоты"
+        ></div>
+
+        <!-- Панель настроек (AI Studio Playground Style) -->
+        <div class="settings-panel" id="settings-panel">
+          <div class="settings-header">Панель настроек</div>
+
+          <!-- Провайдер -->
+          <div class="settings-group">
+            <label class="settings-label" for="provider-select"
+              >Провайдер</label
+            >
+            <select class="settings-select" id="provider-select">
+              <option value="google" selected>Google AI Studio</option>
+              <option value="openai">OpenAI API</option>
+              <option value="anthropic">Anthropic Claude</option>
+              <option value="ollama">Ollama (Local LLM)</option>
+            </select>
+          </div>
+
+          <!-- Модель -->
+          <div class="settings-group">
+            <label class="settings-label" for="model-select">Model</label>
+            <select class="settings-select" id="model-select">
+              <!-- Заполняется динамически через JS -->
+            </select>
+          </div>
+
+          <!-- Температура -->
+          <div class="settings-group">
+            <label class="settings-label" for="temp-range">
+              Температура
+              <span class="value-indicator" id="temp-val">0.7</span>
+            </label>
+            <input
+              type="range"
+              class="settings-range"
+              id="temp-range"
+              min="0"
+              max="2"
+              step="0.1"
+              value="0.7"
+            />
+          </div>
+
+          <!-- Уровень рассуждений -->
+          <div class="settings-group">
+            <label class="settings-label" for="thinking-select"
+              >Уровень рассуждений</label
+            >
+            <select class="settings-select" id="thinking-select">
+              <option value="off">Off (Без рассуждений)</option>
+              <option value="low">Low (Минимальный)</option>
+              <option value="medium" selected>Medium (Средний)</option>
+              <option value="high">High (Максимальный)</option>
+            </select>
+          </div>
+
+          <!-- System Instruction -->
+          <div class="settings-group">
+            <label class="settings-label" for="sys-instruction"
+              >System Instruction</label
+            >
+            <div class="sys-instruction-row">
+              <textarea
+                class="settings-textarea"
+                id="sys-instruction"
+                placeholder="Ты профессиональный ассистент, отвечаешь чётко..."
+              ></textarea>
+              <button
+                class="sys-file-btn"
+                id="sys-file-btn"
+                title="Загрузить инструкцию из файла (.txt, .md)"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <!-- Скрытый input для загрузки файла системной инструкции -->
+            <input
+              type="file"
+              id="sys-file-input"
+              class="hidden"
+              accept=".txt,.md"
+            />
+          </div>
+
+          <!-- Переключатель светлой темы -->
+          <div class="flex-row-settings">
+            <span class="settings-label">Светлая тема</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="theme-switch" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ==========================================
+             ГЛАВНАЯ ОБЛАСТЬ (ЧАТ)
+             ========================================== -->
+      <main class="main-content">
+        <!-- Верхняя панель чата -->
+        <header class="chat-header-bar">
+          <div class="chat-info">
+            <div class="active-chat-title" id="active-chat-title">
+              Новый диалог
+            </div>
+            <div class="active-chat-status" id="active-chat-status">
+              Используется контекст вложенных файлов
+            </div>
+          </div>
+        </header>
+
+        <!-- Лента сообщений (динамическая) -->
+        <div class="chat-container" id="chat-container">
+          <!-- Рендерится динамически через JS -->
+        </div>
+
+        <!-- ==========================================
+                 НИЖНЯЯ ОБЛАСТЬ ВВОДА
+                 ========================================== -->
+        <div class="bottom-container">
+          <div class="input-bar-layout">
+            <!-- Столбец прикреплённых файлов (слева от поля ввода) -->
+            <div class="files-attachment-column" id="files-attachment-column">
+              <div class="files-column-header">
+                <div class="files-header-left">
+                  <button
+                    class="collapse-files-btn"
+                    id="collapse-files-btn"
+                    title="Свернуть панель вложений"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                  </button>
+                  <span>Вложения</span>
+                </div>
+                <button
+                  class="files-add-inline-btn"
+                  id="add-file-trigger"
+                  title="Прикрепить файл"
+                >
+                  <span>+ Добавить</span>
+                </button>
+              </div>
+
+              <!-- Список прикреплённых файлов (динамический) -->
+              <div class="attached-files-list" id="attached-files-list">
+                <div class="file-empty-state">Нет файлов</div>
+              </div>
+            </div>
+
+            <!-- Поле ввода промта -->
+            <div class="prompt-box-container">
+              <!-- Бейдж активного XML-шаблона (если включён) -->
+              <div class="prompt-template-status" id="prompt-template-status">
+                <span
+                  >🧩 Шаблонизатор:
+                  <strong
+                    ><span id="active-template-name-badge"
+                      >default_xml.xml</span
+                    ></strong
+                  ></span
+                >
+                <span
+                  class="remove-template-badge"
+                  id="remove-template-badge"
+                  title="Отключить шаблон"
+                  >✕</span
+                >
+              </div>
+
+              <textarea
+                class="prompt-textarea"
+                id="prompt-textarea"
+                placeholder="Введите ваш запрос к Gemini..."
+              ></textarea>
+
+              <div class="prompt-toolbar">
+                <span class="toolbar-tip">Ctrl + Enter для отправки</span>
+
+                <div class="toolbar-actions-right">
+                  <!-- Кнопка разворачивания вложений (скрепка) -->
+                  <button
+                    class="expand-files-btn"
+                    id="expand-files-btn"
+                    title="Развернуть вложения"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
+                      ></path>
+                    </svg>
+                    <span class="files-badge-counter" id="files-badge-counter"
+                      >0</span
+                    >
+                  </button>
+
+                  <!-- Кнопка конструктора шаблонов -->
+                  <button
+                    class="template-btn"
+                    id="template-btn"
+                    title="Настроить XML/Text Конструктор шаблонов"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+                      ></path>
+                      <path d="M12 6v12M6 12h12"></path>
+                    </svg>
+                  </button>
+
+                  <!-- Кнопка отправки -->
+                  <button
+                    class="send-btn"
+                    id="send-btn"
+                    title="Отправить сообщение"
+                  >
+                    <svg viewBox="0 0 24 24">
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Скрытый input для выбора файлов -->
+        <input type="file" id="real-file-input" class="hidden" multiple />
+      </main>
+    </div>
+
+    <!-- ==========================================
+         КОНТЕКСТНОЕ МЕНЮ ЧАТОВ
+         ========================================== -->
+    <div class="context-menu" id="chat-context-menu">
+      <div class="context-menu-item" id="context-rename">✏️ Переименовать</div>
+      <div class="context-menu-item delete" id="context-delete">🗑️ Удалить</div>
+    </div>
+
+    <!-- ==========================================
+         МОДАЛЬНОЕ ОКНО РЕДАКТОРА ШАБЛОНОВ
+         ========================================== -->
+    <div class="modal-overlay" id="template-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <span class="modal-title">🧩 Редактор XML Шаблонов</span>
+          <span class="modal-close" id="modal-close">&times;</span>
+        </div>
+        <div class="modal-desc">
+          Вы можете редактировать шаблон промпта в реальном времени. Вставляйте
+          теги на одной строке для компактности (например,
+          <code class="modal-code-inline"
+            >&lt;system&gt;{{system}}&lt;/system&gt;</code
+          >). Любое изменение автоматически создаёт временный шаблон.
+        </div>
+
+        <!-- Текстовая область редактирования шаблона -->
+        <textarea
+          class="template-edit-area"
+          id="template-textarea"
+          placeholder="Введите ваш XML-шаблон промпта здесь..."
+        ></textarea>
+
+        <div class="modal-buttons-row">
+          <button class="btn-primary" id="btn-load-custom-template">
+            Импорт из файла
+          </button>
+          <button class="btn-secondary" id="btn-use-default-template">
+            Дефолтный XML
+          </button>
+          <button class="btn-secondary btn-danger" id="btn-disable-template">
+            Выключить шаблон
+          </button>
+        </div>
+
+        <!-- Скрытый input для загрузки файла шаблона -->
+        <input
+          type="file"
+          id="template-file-input"
+          class="hidden"
+          accept=".xml,.txt,.md,.html"
+        />
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TOAST-УВЕДОМЛЕНИЕ
+         ========================================== -->
+    <div class="toast-notification" id="toast-notification">
+      <span id="toast-message">Текст уведомления</span>
+    </div>
+
+    <!-- ==========================================
+         ПОДКЛЮЧЕНИЕ СКРИПТОВ (ES Module)
+         main.js — единственная точка входа,
+         импортирует все необходимые модули:
+           - appState.js   (состояние)
+           - domCache.js   (кеш DOM)
+           - utils.js      (утилиты)
+           - splitter.js   (сплиттер)
+           - templateEngine.js (шаблоны)
+           - renderers.js  (рендеринг)
+           - eventHandlers.js (события)
+         ========================================== -->
+    <script type="module" src="frontend/js/main.js"></script>
+  </body>
+</html>
